@@ -1,5 +1,8 @@
 const jwt = require('jsonwebtoken');
-var User = require('sequelize').import('../models/user');
+const DataTypes = require('sequelize').DataTypes;
+
+var db = require('../db');
+var User = require('../models/user')(db, DataTypes);
 
 module.exports = function (req, res, next) {
     if (req.method == 'OPTIONS') {
@@ -16,9 +19,9 @@ module.exports = function (req, res, next) {
                         console.log(`user: ${user}`)
                         next()
                     },
-                        function () {
-                            res.status(401).send({ error: "not authorized" });
-                        })
+                    function () {
+                        res.status(401).send({ error: "not authorized" });
+                    });
 
                 } else {
                     res.status(400).send({ error: "not authorized" })
